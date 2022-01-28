@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["app.go"],
+    importpath = "github.com/broadcastertools/cliprate/core/fe/pkg/app",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//core/api:go_default_library",
+        "//core/fe/pkg/authz:go_default_library",
+        "//pkg/storage:go_default_library",
+    ],
+)

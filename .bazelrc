@@ -1,0 +1,12 @@
+try-import %workspace%/.bazelrc.user
+
+# populate env used for stamping builds etc
+build --workspace_status_command=./scripts/print-workspace-status.sh
+run --workspace_status_command=./scripts/print-workspace-status.sh
+
+# Add more details about test failures in the logs.
+test --test_output all
+
+# Binary build features.
+build --features=pure
+build --features=static

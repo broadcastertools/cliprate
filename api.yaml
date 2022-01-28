@@ -1,0 +1,257 @@
+openapi: 3.0.1
+info:
+  title: Clip Rate
+  contact:
+    email: hello+bt+cliprate@bweston.me
+  license:
+    name: MIT
+  version: 1.0.0
+externalDocs:
+  description: GitHub project
+  url: https://github.com/broadcastertools/cliprate
+servers:
+- url: http://localhost:8000/v1
+tags:
+- name: conf
+  description: Configuration endpoints.
+- name: auth
+  description: Authorization endpoints.
+- name: clips
+  description: Access to clips.
+
+paths:
+  /siteconfig:
+    get:
+      tags:
+      - conf
+      summary: Get site configuration.
+      operationId: getSiteConfiguration
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteConfig'
+
+  /me:
+    get:
+      tags:
+      - auth
+      summary: Get current logged in subscriber.
+      operationId: getSelf
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+
+  /login:
+    post:
+      tags:
+      - auth
+      summary: Login with Twitch code.
+      operationId: loginWithTwitchCode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/loginWithTwitchCodeRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/loginWithTwitchCodeResponse'
+        401:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+
+  /clips:
+    get:
+      tags:
+      - conf
+      summary: Get a list of clips.
+      operationId: getClips
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Clip'
+
+components:
+  schemas:
+    loginWithTwitchCodeRequest:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+
+    loginWithTwitchCodeResponse:
+      type: object
+      required:
+        - token
+        - self
+      properties:
+        token:
+          type: string
+        self:
+          $ref: '#/components/schemas/Subscriber'
+
+    SiteConfig:
+      type: object
+      required:
+        - streamer_display_name
+        - streamer_login
+        - streamer_id
+        - domain
+        - logo_uri
+        - appbar_color
+        - authorization_url
+        - is_gifted_authorized
+      properties:
+        streamer_display_name:
+          type: string
+          description: The name of the streamer that is hosting this insance, for example MuTeX
+
+        streamer_login:
+          type: string
+          description: The name of the streamer that is hosting this insance, for example mutex
+
+        streamer_id:
+          type: string
+          description: The name of the streamer that is hosting this insance, for example 98506045
+
+        domain:
+          type: string
+          description: The expected domain for this application, for example clips.mutexisthegoat.com
+
+        logo_uri:
+          type: string
+          description: A full URI to a logo that should be displayed in the app.
+
+        appbar_color:
+          type: string
+          description: A hex color used for the appbar.
+
+        authorization_url:
+          type: string
+          description: A URL to redirect the user to login.
+
+        is_gifted_authorized:
+          type: boolean
+          description: When true, subscribers that was gifted their subscription can login.
+
+    Clip:
+      type: object
+      required:
+        - clip_id
+        - posted_by
+        - posted
+        - title
+        - category
+        - thumbnail_uri
+        - type
+        - data
+      properties:
+        clip_id:
+          type: string
+          description: Our subscriber identifier.
+
+        posted_by:
+          type: string
+          description: Identifier of the subscriber.
+
+        posted:
+          type: string
+          description: Timestamp for when the clip was posted.
+
+        title:
+          type: string
+          description: A display title.
+
+        category:
+          type: string
+          description: The category name the clip is posted in.
+
+        thumbnail_uri:
+          type: string
+          description: A URI to the thumbnail.
+
+        type:
+          type: string
+          enum:
+            - youtube
+            - twitchclip
+          description: Where the clip is hosted.
+
+        data:
+          type: string
+          description: Data for the clip, this should be used along with clip type.
+
+    Subscriber:
+      type: object
+      required:
+        - subscriber_id
+        - email
+        - display_name
+        - twitch_id
+        - joined
+        - is_subscribed
+        - is_admin
+      properties:
+        subscriber_id:
+          type: string
+          description: Our subscriber identifier.
+
+        email:
+          type: string
+          description: Email address of the subscriber, this is where notifications would be sent too.
+
+        display_name:
+          type: string
+          description: The display name of the subscriber.
+
+        twitch_id:
+          type: string
+          description: Twitch's identifier for the subscriber.
+
+        joined:
+          type: string
+          description: A timestamp for when the subscriber logged into this application first.
+
+        is_subscribed:
+          type: boolean
+          description: Is the subscriber currently subscriber.
+
+        is_admin:
+          type: boolean
+          description: Is the subscriber a mod or owner of the broadcaster.
+
+    ApiResponse:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header

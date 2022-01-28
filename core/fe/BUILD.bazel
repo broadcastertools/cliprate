@@ -1,0 +1,21 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["main.go"],
+    importpath = "github.com/broadcastertools/cliprate/core/fe",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//core/api:go_default_library",
+        "//core/fe/pkg/app:go_default_library",
+        "//core/fe/pkg/authz:go_default_library",
+        "//pkg/storage:go_default_library",
+        "@com_github_rs_cors//:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "fe",
+    embed = [":go_default_library"],
+    visibility = ["//visibility:public"],
+)

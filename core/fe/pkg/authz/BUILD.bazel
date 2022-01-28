@@ -1,0 +1,9 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["authz.go"],
+    importpath = "github.com/broadcastertools/cliprate/core/fe/pkg/authz",
+    visibility = ["//visibility:public"],
+    deps = ["@com_github_nicklaw5_helix//:go_default_library"],
+)

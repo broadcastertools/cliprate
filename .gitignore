@@ -1,0 +1,9 @@
+# These directories are symlinks, should not be tracked.
+/bazel-*
+
+# These should be obtained by the host machine at build time.
+/app/node_modules
+
+# Custom overrides for build system can be defined by user, these should
+# not be tracked.
+/.bazelrc.user
