@@ -19,25 +19,25 @@ type config struct {
 	// When false, gifted subscriptions are not authorized.
 	AllowGifted bool `envconfig:"allow_gifted"`
 	// MongoDB DSN.
-	MongoDSN string `envconfig:"mongodb_dsn", "mongodb://localhost:27017/"`
+	MongoDSN string `envconfig:"mongodb_dsn" default:"mongodb://localhost:27017/"`
 	// What to listen on for incomming requests.
-	ListenTo string `envconfig:"listen", ":8000"`
+	ListenTo string `envconfig:"listen" default:":8000"`
 	// The domain name the app is running on.
-	DomainName string `envconfig:"domainname", "clips.mutexisthegoat.com"`
+	DomainName string `envconfig:"domainname" default:"clips.mutexisthegoat.com"`
 
 	// Twitch API client id.
-	TwitchClientID string `envconfig:"twitch.client_id"`
+	TwitchClientID string `envconfig:"twitch.client_id" required:"true"`
 	// Twitch API secret.
-	TwitchSecret string `envconfig:"twitch.secret"`
+	TwitchSecret string `envconfig:"twitch.secret" required:"true"`
 	// The base url the application is running on and should accept a redirect.
-	TwitchRedirectURL string `envconfig:"twitch.redirect", "http://localhost:3000"`
+	TwitchRedirectURL string `envconfig:"twitch.redirect" default:"http://localhost:3000"`
 
 	// A hex colour code for the app bar.
-	AppBarColour        string `envconfig:"appbarcolour", "1f1d43"`
-	LogoUri             string `envconfig:"logouri", "/imgs/logo.png"`
-	StreamerDisplayName string `envconfig:"steamer_display_name", "MuTeX"`
-	StreamerId          string `envconfig:"streamer_id", "98506045"`
-	StreamerLogin       string `envconfig:"streamer_login", "mutex"`
+	AppBarColour        string `envconfig:"appbarcolour" default:"1f1d43"`
+	LogoUri             string `envconfig:"logouri" default:"/imgs/logo.png"`
+	StreamerDisplayName string `envconfig:"steamer_display_name" default:"MuTeX"`
+	StreamerId          string `envconfig:"streamer_id" default:"98506045"`
+	StreamerLogin       string `envconfig:"streamer_login" default:"mutex"`
 }
 
 func validateConfiguration(c config) {
